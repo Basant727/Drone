@@ -1,242 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Interactive Math Calculator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Terminal Velocity Calculator</title>
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async 
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
+  <!-- MathJax for formulas -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async 
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 0 20px;
-    color: #222;
-    background: #f4f6f8;
-  }
-  h1 {
-    color: #0a4a8a;
-    text-align: center;
-  }
-  label {
-    display: block;
-    margin-top: 15px;
-    font-weight: 600;
-  }
-  input[type="number"] {
-    width: 100%;
-    padding: 8px;
-    margin-top: 6px;
-    border: 2px solid #0a4a8a;
-    border-radius: 6px;
-    font-size: 1rem;
-  }
-  select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 6px;
-    border-radius: 6px;
-    border: 2px solid #0a4a8a;
-    font-size: 1rem;
-  }
-  button {
-    margin-top: 20px;
-    background-color: #0a4a8a;
-    border: none;
-    color: white;
-    padding: 12px 20px;
-    font-size: 1.1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-  }
-  button:hover {
-    background-color: #08386b;
-  }
-  .results {
-    margin-top: 30px;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 14px rgba(0, 74, 138, 0.15);
-  }
-  .step {
-    margin-bottom: 14px;
-  }
-</style>
+  <style>
+    body {
+      background: #f1f4fa;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 650px;
+      margin: 48px auto 0 auto;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(45,100,178,.11);
+      padding: 38px 32px 40px 32px;
+    }
+    h1 {
+      text-align: center;
+      color: #1761a0;
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 22px;
+    }
+    .formula-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(90deg,#60b0f4 0%,#e7f2fa 70%);
+      border-radius: 14px;
+      box-shadow: 0 2px 18px rgba(45,100,178,.08);
+      padding: 22px 20px;
+      margin-bottom: 28px;
+    }
+    .formula-label {
+      font-size: 1.1em;
+      font-weight: 700;
+      color: #194b7c;
+      margin-bottom: 7px;
+      letter-spacing: 0.5px;
+      background: #e4f1fd;
+      padding: 6px 13px;
+      border-radius: 8px;
+      box-shadow: 0 0 7px #cde7fc inset;
+      align-self: flex-start;
+    }
+    .formula-latex {
+      font-size: 1.38em;
+      color: #0d3258;
+      background: rgba(255,255,255,0.9);
+      border-radius: 8px;
+      padding: 8px 18px 8px 18px;
+      border: 1px solid #bde1fa;
+      box-shadow: 0 1px 9px rgba(25,75,124,0.10);
+    }
+    label {
+      display: block;
+      margin-top: 17px;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #1761a0;
+      letter-spacing: 0.2px;
+      font-size: 1.09em;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 11px;
+      border: 2px solid #60b0f4;
+      border-radius: 7px;
+      background: #f6fafd;
+      font-size: 1.07em;
+      margin-bottom: 15px;
+      transition: border-color 0.2s;
+    }
+    select:focus, input[type="number"]:focus {
+      border-color: #1761a0;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 15px 0;
+      background: linear-gradient(to right,#1761a0 40%,#60b0f4 120%);
+      color: #fff;
+      font-size: 1.2em;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 2px 12px rgba(23,97,160,0.10);
+      cursor: pointer;
+      transition: background 0.15s;
+      letter-spacing: 0.5px;
+    }
+    button:hover, button:focus {
+      background: linear-gradient(to right,#1061c0 45%,#60b0f4 120%);
+    }
+    @media (max-width: 700px) {
+      .container { padding: 18px 8px 26px 8px; }
+      h1 { font-size: 2rem; }
+      .formula-latex { font-size: 1em; }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Terminal Velocity Calculator</h1>
+    <div class="formula-box">
+      <div class="formula-label">Given the formula</div>
+      <div class="formula-latex">
+        \( v_t = \dfrac{(\rho_p - \rho_f)\, g\, d^2}{18\, \mu} \)
+      </div>
+    </div>
+    <form id="calcForm">
+      <label for="variable">Choose the variable to find:</label>
+      <select id="variable" name="variable" required>
+        <option value="vt">Terminal Velocity (v<sub>t</sub>)</option>
+        <option value="rhop">Particle Density (&#961;<sub>p</sub>)</option>
+        <option value="rhof">Fluid Density (&#961;<sub>f</sub>)</option>
+        <option value="g">Gravity (g)</option>
+        <option value="d">Diameter (d)</option>
+        <option value="mu">Viscosity (&#956;)</option>
+      </select>
+      <div id="inputs-container"></div>
+      <button type="submit">Calculate</button>
+    </form>
+    <div id="results" aria-live="polite" style="display:none; margin-top:28px;"></div>
+  </div>
 
-<h1>Terminal Velocity Calculator</h1>
-<p>Given the formula: \\( v_t = \dfrac{(\rho_p - \rho_f) g d^2}{18 \mu} \\)</p>
+  <script>
+    // Variable info for labels and units
+    const variables = {
+      vt: { label: "Enter Terminal Velocity (vₜ):", symbol: "v_t" },
+      rhop: { label: "Enter Particle Density (ρₚ):", symbol: "\\rho_p" },
+      rhof: { label: "Enter Fluid Density (ρ_f):", symbol: "\\rho_f" },
+      g: { label: "Enter Gravity (g):", symbol: "g" },
+      d: { label: "Enter Diameter (d):", symbol: "d" },
+      mu: { label: "Enter Viscosity (μ):", symbol: "\\mu" }
+    };
+    const formulaVariables = ["vt", "rhop", "rhof", "g", "d", "mu"];
+    const inputsContainer = document.getElementById("inputs-container");
+    const variableSelect = document.getElementById("variable");
+    const resultsDiv = document.getElementById("results");
 
-<form id="calcForm">
-  <label for="variable">Choose the variable to find:</label>
-  <select id="variable" name="variable" required>
-    <option value="vt">Terminal Velocity (v<sub>t</sub>)</option>
-    <option value="rhop">Particle Density (&#961;<sub>p</sub>)</option>
-    <option value="rhof">Fluid Density (&#961;<sub>f</sub>)</option>
-    <option value="g">Gravity (g)</option>
-    <option value="d">Diameter (d)</option>
-    <option value="mu">Viscosity (&#956;)</option>
-  </select>
-
-  <div id="inputs-container"></div>
-
-  <button type="submit">Calculate</button>
-</form>
-
-<div id="results" class="results" aria-live="polite" style="display:none;"></div>
-
-<script>
-// Variable info for labels and units
-const variables = {
-  vt: { label: "Terminal Velocity (vₜ)", symbol: "v_t" },
-  rhop: { label: "Particle Density (ρₚ)", symbol: "\\rho_p" },
-  rhof: { label: "Fluid Density (ρ_f)", symbol: "\\rho_f" },
-  g: { label: "Gravity (g)", symbol: "g" },
-  d: { label: "Diameter (d)", symbol: "d" },
-  mu: { label: "Viscosity (μ)", symbol: "\\mu" }
-};
-
-// Input fields that depend on which variable to find
-const formulaVariables = ["vt", "rhop", "rhof", "g", "d", "mu"];
-
-const inputsContainer = document.getElementById("inputs-container");
-const variableSelect = document.getElementById("variable");
-const resultsDiv = document.getElementById("results");
-
-// Render inputs except the one to be solved
-function renderInputs() {
-  const toFind = variableSelect.value;
-  inputsContainer.innerHTML = "";
-
-  formulaVariables.forEach(variable => {
-    if (variable !== toFind) {
-      const vars = variables[variable];
-      const label = document.createElement("label");
-      label.setAttribute("for", variable);
-      label.innerHTML = `Enter ${vars.label}:`;
-      const input = document.createElement("input");
-      input.type = "number";
-      input.step = "any";
-      input.name = variable;
-      input.id = variable;
-      input.required = true;
-      inputsContainer.appendChild(label);
-      inputsContainer.appendChild(input);
+    function renderInputs() {
+      const toFind = variableSelect.value;
+      inputsContainer.innerHTML = "";
+      formulaVariables.forEach(variable => {
+        if (variable !== toFind) {
+          const vars = variables[variable];
+          const label = document.createElement("label");
+          label.setAttribute("for", variable);
+          label.innerHTML = vars.label;
+          const input = document.createElement("input");
+          input.type = "number";
+          input.step = "any";
+          input.name = variable;
+          input.id = variable;
+          input.required = true;
+          inputsContainer.appendChild(label);
+          inputsContainer.appendChild(input);
+        }
+      });
     }
-  });
-}
 
-variableSelect.addEventListener("change", () => {
-  renderInputs();
-  resultsDiv.style.display = "none";
-  resultsDiv.innerHTML = "";
-});
-
-renderInputs();
-
-document.getElementById("calcForm").addEventListener("submit", event => {
-  event.preventDefault();
-
-  // Gather input values as floats
-  const toFind = variableSelect.value;
-  const vals = {};
-  try {
-    formulaVariables.forEach(v => {
-      if (v !== toFind) {
-        const el = document.getElementById(v);
-        const val = parseFloat(el.value);
-        if (isNaN(val)) throw new Error(`Please enter a valid number for ${variables[v].label}`);
-        vals[v] = val;
-      }
+    variableSelect.addEventListener("change", () => {
+      renderInputs();
+      resultsDiv.style.display = "none";
+      resultsDiv.innerHTML = "";
     });
-  } catch(err) {
-    alert(err.message);
-    return;
-  }
 
-  // Helper: squared
-  const sq = x => x * x;
+    renderInputs();
 
-  // Calculate based on selected variable to find
-  let message = "";
-  let result = null;
-
-  switch(toFind) {
-    case "vt":
-      result = ((vals.rhop - vals.rhof) * vals.g * sq(vals.d)) / (18 * vals.mu);
-      message += `<div class="step">Step: Substitute values into formula:<br>
-                  \\( v_t = \\frac{(\\rho_p - \\rho_f) g d^2}{18 \\mu} = \\frac{(${vals.rhop} - ${vals.rhof}) \\times ${vals.g} \\times ${vals.d}^2}{18 \\times ${vals.mu}} \\)</div>`;
-      message += `<div class="step">Step: Calculate numerator:<br>
-                  \\( (${vals.rhop} - ${vals.rhof}) \\times ${vals.g} \\times ${sq(vals.d)} = ${(vals.rhop - vals.rhof) * vals.g * sq(vals.d)} \\)</div>`;
-      message += `<div class="step">Step: Calculate denominator:<br>
-                  \\( 18 \\times ${vals.mu} = ${18 * vals.mu} \\)</div>`;
-      message += `<div class="step"><strong>Result:</strong><br>
-                  \\( v_t = ${result.toFixed(5)} \\)</div>`;
-      break;
-
-    case "rhop":
-      result = (18 * vals.mu * vals.vt) / (vals.g * sq(vals.d)) + vals.rhof;
-      message += `<div class="step">Rearranged formula for \\( \\rho_p \\):<br>
-                  \\( \\rho_p = \\frac{18 \\mu v_t}{g d^2} + \\rho_f \\)</div>`;
-      message += `<div class="step">Substitute values:<br>
-                  \\( \\rho_p = \\frac{18 \\times ${vals.mu} \\times ${vals.vt}}{${vals.g} \\times ${sq(vals.d)}} + ${vals.rhof} = ${result.toFixed(5)} \\)</div>`;
-      message += `<div class="step"><strong>Result:</strong> \\( \\rho_p = ${result.toFixed(5)} \\)</div>`;
-      break;
-
-    case "rhof":
-      result = vals.rhop - (18 * vals.mu * vals.vt) / (vals.g * sq(vals.d));
-      message += `<div class="step">Rearranged formula for \\( \\rho_f \\):<br>
-                  \\( \\rho_f = \\rho_p - \\frac{18 \\mu v_t}{g d^2} \\)</div>`;
-      message += `<div class="step">Substitute values:<br>
-                  \\( \\rho_f = ${vals.rhop} - \\frac{18 \\times ${vals.mu} \\times ${vals.vt}}{${vals.g} \\times ${sq(vals.d)}} = ${result.toFixed(5)} \\)</div>`;
-      message += `<div class="step"><strong>Result:</strong> \\( \\rho_f = ${result.toFixed(5)} \\)</div>`;
-      break;
-
-    case "g":
-      result = (18 * vals.mu * vals.vt) / ((vals.rhop - vals.rhof) * sq(vals.d));
-      message += `<div class="step">Rearranged formula for \\( g \\):<br>
-                  \\( g = \\frac{18 \\mu v_t}{(\\rho_p - \\rho_f) d^2} \\)</div>`;
-      message += `<div class="step">Substitute values:<br>
-                  \\( g = \\frac{18 \\times ${vals.mu} \\times ${vals.vt}}{(${vals.rhop} - ${vals.rhof}) \\times ${sq(vals.d)}} = ${result.toFixed(5)} \\)</div>`;
-      message += `<div class="step"><strong>Result:</strong> \\( g = ${result.toFixed(5)} \\)</div>`;
-      break;
-
-    case "d":
-      // Rearranged formula to solve for d:
-      // d = sqrt( (18 mu vt) / ( (rhop - rhof) g ) )
-      result = Math.sqrt((18 * vals.mu * vals.vt) / ((vals.rhop - vals.rhof) * vals.g));
-      message += `<div class="step">Rearranged formula for \\( d \\):<br>
-                  \\( d = \\sqrt{ \\frac{18 \\mu v_t}{(\\rho_p - \\rho_f) g} } \\)</div>`;
-      message += `<div class="step">Substitute values:<br>
-                  \\( d = \\sqrt{ \\frac{18 \\times ${vals.mu} \\times ${vals.vt}}{(${vals.rhop} - ${vals.rhof}) \\times ${vals.g}} } = ${result.toFixed(5)} \\)</div>`;
-      message += `<div class="step"><strong>Result:</strong> \\( d = ${result.toFixed(5)} \\)</div>`;
-      break;
-
-    case "mu":
-      result = ((vals.rhop - vals.rhof) * vals.g * sq(vals.d)) / (18 * vals.vt);
-      message += `<div class="step">Rearranged formula for \\( \\mu \\):<br>
-                  \\( \\mu = \\frac{(\\rho_p - \\rho_f) g d^2}{18 v_t} \\)</div>`;
-      message += `<div class="step">Substitute values:<br>
-                  \\( \\mu = \\frac{(${vals.rhop} - ${vals.rhof}) \\times ${vals.g} \\times ${sq(vals.d)}}{18 \\times ${vals.vt}} = ${result.toFixed(5)} \\)</div>`;
-      message += `<div class="step"><strong>Result:</strong> \\( \\mu = ${result.toFixed(5)} \\)</div>`;
-      break;
-  }
-
-  resultsDiv.innerHTML = message;
-  resultsDiv.style.display = "block";
-
-  // Rerender MathJax to parse new math content
-  MathJax.typesetPromise();
-});
-</script>
-
+    document.getElementById("calcForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const toFind = variableSelect.value;
+      const vals = {};
+      try {
+        formulaVariables.forEach(v => {
+          if (v !== toFind) {
+            const el = document.getElementById(v);
+            const val = parseFloat(el.value);
+            if (isNaN(val)) throw new Error(`Please enter a valid number for ${variables[v].label}`);
+            vals[v] = val;
+          }
+        });
+      } catch(err) {
+        alert(err.message);
+        return;
+      }
+      const sq = x => x * x;
+      let message = "";
+      let result = null;
+      switch(toFind) {
+        case "vt":
+          result = ((vals.rhop - vals.rhof) * vals.g * sq(vals.d)) / (18 * vals.mu);
+          message += `<div style="margin-bottom:8px;">Step 1: Substitute into formula:<br>
+            \\( v_t = \\frac{(${vals.rhop} - ${vals.rhof}) \\times ${vals.g} \\times ${vals.d}^2}{18 \\times ${vals.mu}} \\)
+            </div>`;
+          message += `<div style="margin-bottom:8px;">Step 2: Numerator:<br>
+            \\( (${vals.rhop}-${vals.rhof}) \\times ${vals.g} \\times ${sq(vals.d)} = ${(vals.rhop - vals.rhof) * vals.g * sq(vals.d)} \\)
+            </div>`;
+          message += `<div style="margin-bottom:8px;">Step 3: Denominator:<br>
+            \\( 18 \\times ${vals.mu} = ${18 * vals.mu} \\)
+            </div>`;
+          message += `<div style="font-weight:bold;color:#1761a0;">Result: \\( v_t = ${result.toFixed(5)} \\)</div>`;
+          break;
+        case "rhop":
+          result = (18 * vals.mu * vals.vt) / (vals.g * sq(vals.d)) + vals.rhof;
+          message += `<div style="margin-bottom:8px;">Step 1: Rearranged formula:<br>
+            \\( \\rho_p = \\frac{18 \\mu v_t}{g d^2} + \\rho_f \\)
+            </div>`;
+          message += `<div style="margin-bottom:8px;">Step 2: Substitute:<br>
+            \\( \\rho_p = \\frac{18 \\times ${vals.mu} \\times ${vals.vt}}{${vals.g} \\times ${sq(vals.d)}} + ${vals.rhof} \\)
+            </div>`;
+          message += `<div style="font-weight:bold;color:#1761a0;">Result: \\( \\rho_p = ${result.toFixed(5)} \\)</div>`;
+          break;
+        case "rhof":
+          result = vals.rhop - (18 * vals.mu * vals.vt) / (vals.g * sq(vals.d));
+          message += `<div style="margin-bottom:8px;">Step 1: Rearranged formula:<br>
+            \\( \\rho_f = \\rho_p - \\frac{18 \\mu v_t}{g d^2} \\)
+            </div>`;
+          message += `<div style="margin-bottom:8px;">Step 2: Substitute:<br>
+            \\( \\rho_f = ${vals.rhop} - \\frac{18 \\times ${vals.mu} \\times ${vals.vt}}{${vals.g} \\times ${sq(vals.d)}} \\)
+            </div>`;
+          message += `<div style="font-weight:bold;color:#1761a0;">Result: \\( \\rho_f = ${result.toFixed(5)} \\)</div>`;
+          break;
+        case "g":
+          result = (18 * vals.mu * vals.vt) / ((vals.rhop - vals.rhof) * sq(vals.d));
+          message += `<div style="margin-bottom:8px;">Step 1: Rearranged formula:<br>
+            \\( g = \\frac{18 \\mu v_t}{(\\rho_p - \\rho_f) d^2} \\)
+            </div>`;
+          message += `<div style="margin-bottom:8px;">Step 2: Substitute:<br>
+            \\( g = \\frac{18 \\times ${vals.mu} \\times ${vals.vt}}{(${vals.rhop} - ${vals.rhof}) \\times ${sq(vals.d)}} \\)
+            </div>`;
+          message += `<div style="font-weight:bold;color:#1761a0;">Result: \\( g = ${result.toFixed(5)} \\)</div>`;
+          break;
+        case "d":
+          result = Math.sqrt((18 * vals.mu * vals.vt) / ((vals.rhop - vals.rhof) * vals.g));
+          message += `<div style="margin-bottom:8px;">Step 1: Rearranged formula:<br>
+            \\( d = \\sqrt{ \\frac{18 \\mu v_t}{(\\rho_p - \\rho_f) g} } \\)
+            </div>`;
+          message += `<div style="margin-bottom:8px;">Step 2: Substitute:<br>
+            \\( d = \\sqrt{ \\frac{18 \\times ${vals.mu} \\times ${vals.vt}}{(${vals.rhop} - ${vals.rhof}) \\times ${vals.g}} } \\)
+            </div>`;
+          message += `<div style="font-weight:bold;color:#1761a0;">Result: \\( d = ${result.toFixed(5)} \\)</div>`;
+          break;
+        case "mu":
+          result = ((vals.rhop - vals.rhof) * vals.g * sq(vals.d)) / (18 * vals.vt);
+          message += `<div style="margin-bottom:8px;">Step 1: Rearranged formula:<br>
+            \\( \\mu = \\frac{(\\rho_p - \\rho_f) g d^2}{18 v_t} \\)
+            </div>`;
+          message += `<div style="margin-bottom:8px;">Step 2: Substitute:<br>
+            \\( \\mu = \\frac{(${vals.rhop} - ${vals.rhof}) \\times ${vals.g} \\times ${sq(vals.d)}}{18 \\times ${vals.vt}} \\)
+            </div>`;
+          message += `<div style="font-weight:bold;color:#1761a0;">Result: \\( \\mu = ${result.toFixed(5)} \\)</div>`;
+          break;
+      }
+      resultsDiv.innerHTML = message;
+      resultsDiv.style.display = "block";
+      MathJax.typesetPromise();
+    });
+  </script>
 </body>
 </html>
